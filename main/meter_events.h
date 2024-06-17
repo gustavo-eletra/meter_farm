@@ -36,8 +36,8 @@ typedef struct
     int dr_size;
 } UARTData;
 
-UARTData abnt_data;
-CommandQueue abnt_command_queue;
+extern UARTData abnt_data;
+extern CommandQueue abnt_command_queue;
 
 //Helper functions
 uint16_t crc16arc_bit(uint16_t crc, void const *mem, size_t len);

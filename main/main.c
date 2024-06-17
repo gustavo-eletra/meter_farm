@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <memory.h>
 #include <stdbool.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -48,14 +50,34 @@ void app_main(void)
 
     //vTaskSuspend(b);
 
-    int x = 10;
-    CommandQueue *queue = create_command_queue(4);
-    register_func_to_command_queue(queue, &a, NULL, A);
-    register_func_to_command_queue(queue, &b, &x, B);
-    register_func_to_command_queue(queue, &c, NULL, C);
-    enqueue_command_buffer(queue, A);
-    enqueue_command_buffer(queue, B);
-    enqueue_command_buffer(queue, C);
+    typedef struct
+    {
+        int x;
+        int y;
+    }st;
 
-    process_command_queue(queue);
+    const char *o = "oi";
+    st x;
+    x.x = 40;
+    x.y = 30;
+    void *y = &o;
+    char *v = *((char *)y);
+    int i = *(&v + 1) - v;
+    void *z = calloc(1, sizeof(st));
+    printf("size: %i\n", sizeof(st));
+    printf("size: %i\n", i);
+    memcpy(z, y, sizeof(*y));
+    st *w = (st *)z;
+    printf("struct test: %i\n", w->x);
+    printf("struct test: %i\n", w->y);
+    //printf("struct test: %i\n", w->y);
+    // CommandQueue *queue = create_command_queue(4);
+    // register_func_to_command_queue(queue, &a, NULL, A);
+    // register_func_to_command_queue(queue, &b, &x, B);
+    // register_func_to_command_queue(queue, &c, NULL, C);
+    // enqueue_command_buffer(queue, A);
+    // enqueue_command_buffer(queue, B);
+    // enqueue_command_buffer(queue, C);
+
+    // process_command_queue(queue);
 }

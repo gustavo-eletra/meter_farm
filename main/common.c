@@ -122,6 +122,7 @@ void clear_command_queue(CommandQueue *cq)
     {
         cq->command_arr[i] = -1;
         cq->func_arr[i] = NULL;
+        free(cq->data_arr[i].data);
         cq->queue[i] = -1;
     }
     cq->counter = 0;
@@ -143,9 +144,10 @@ void register_func_to_command_queue(CommandQueue *cq, void (*func)(void *paramet
     cq->func_arr[cq->counter] = *(*func);
     if(func_args != NULL)
     {
-        cq->data_arr[cq->counter].data = func_args;
-        //memcpy(cq->data_arr[cq->counter].data, func_args, sizeof(*func_args));
-       // printf("ptr : %p\n", func_args);
+        printf("ptr : %i\n", *(int *)func_args);
+        cq->data_arr[cq->counter].data = malloc(sizeof(*func_args));
+        memcpy(cq->data_arr[cq->counter].data, func_args, sizeof(*func_args));
+        printf("ptr : %i\n", *(int *)cq->data_arr[cq->counter].data);
     }
     else
     {
