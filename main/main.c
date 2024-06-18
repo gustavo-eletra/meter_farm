@@ -6,12 +6,12 @@
 #include <freertos/task.h>
 #include "meter_events.h"
 
-// typedef enum
-// {
-//     A,
-//     B,
-//     C
-// }TEST;
+typedef enum
+{
+    A,
+    B,
+    C
+}TEST;
 
 void init()
 {
@@ -50,49 +50,21 @@ void app_main(void)
 
     //vTaskSuspend(b);
 
-    //int x = 50;
-    // CommandQueue *queue = create_command_queue(10);
-    // register_func_to_command_queue(queue, &a, NULL, 0, A);
-    // register_func_to_command_queue(queue, &b, &x, 4, B);
-    // register_func_to_command_queue(queue, &c, NULL, 0, C);
-    // enqueue_command_buffer(queue, A);
-    // enqueue_command_buffer(queue, C);
-    // enqueue_command_buffer(queue, B);
-    // enqueue_command_buffer(queue, B);
-    // enqueue_command_buffer(queue, C);
-    // enqueue_command_buffer(queue, B);
-    // enqueue_command_buffer(queue, A);
+    int x = 50;
+    CommandQueue *queue = create_command_queue(10);
+    register_func_to_command_queue(queue, &a, NULL, 0, A);
+    register_func_to_command_queue(queue, &b, &x, 4, B);
+    register_func_to_command_queue(queue, &c, NULL, 0, C);
+    enqueue_command_buffer(queue, A);
+    enqueue_command_buffer(queue, C);
+    enqueue_command_buffer(queue, B);
+    enqueue_command_buffer(queue, B);
+    enqueue_command_buffer(queue, C);
+    enqueue_command_buffer(queue, B);
+    enqueue_command_buffer(queue, A);
 
-    // process_command_queue(queue);
+    process_command_queue(queue);
 
-     int y = 0;
-    // cq_fsm(queue, B, &y);
-
-    setup_uart();
-    
-    for(int i = 0; i < 66; i++)
-    {
-        if(i < 65)
-        {
-            printf("%x | ", abnt_data.ds[i]);
-        }
-        else
-        {
-            printf("%x\n", abnt_data.ds[i]);
-        }
-    }
-
-    setup_abnt_command(0x14, NULL);
-
-    for(int i = 0; i < 66; i++)
-    {
-        if(i < 65)
-        {
-            printf("%x | ", abnt_data.ds[i]);
-        }
-        else
-        {
-            printf("%x\n", abnt_data.ds[i]);
-        }
-    }
+     int y = 10;
+    cq_fsm(queue, B, &y);
 }

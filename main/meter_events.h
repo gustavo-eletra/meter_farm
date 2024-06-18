@@ -17,15 +17,16 @@ const static uart_port_t uart_port = UART_NUM_2;
 typedef enum
 {
     SEND_COMMAND_TO_METER,
+    SET_ID,
     SEND_DATA_TO_QUEUE,
     OPEN_SESSION,
     CLOSE_SESSION
 }ABNT_COMMANDS;
 
-typedef enum
-{
-    A
-}DLMS_COMMANDS;
+// typedef enum
+// {
+
+// }DLMS_COMMANDS;
 
 typedef struct
 {

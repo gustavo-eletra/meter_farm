@@ -25,6 +25,8 @@ void setup_uart()
 {
     abnt_data.dr = (uint8_t *)calloc(UART_BUF_SIZE, 8);
     abnt_data.ds = (uint8_t *)calloc(66, 8);
+    abnt_data.ds_size = 66;
+    abnt_data.dr_size = 258;
 
     for(int i = 0; i < 64; i++)
     {
@@ -72,8 +74,8 @@ void set_meter_id_task()
 {
     if(abnt_data.dr == NULL || abnt_data.dr[2] == 0)
     {
-        ESP_LOGW(UART_TAG, "Sem ID. Deletando task");
-        vTaskDelete(NULL);
+        ESP_LOGW(UART_TAG, "Sem ID. Retornando");
+        return;
     }
 
     for(int i = 0; i < 4; i++)
