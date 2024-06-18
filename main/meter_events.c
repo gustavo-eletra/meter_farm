@@ -1,7 +1,25 @@
 #include "meter_events.h"
 #include "common.h"
 
+const char *UART_TAG = "UART";
 char METER_ID[4];
+UARTData abnt_data;
+
+uint16_t crc16arc_bit(uint16_t crc, void const *mem, size_t len) {
+    unsigned char const *data = mem;
+    if (data == NULL)
+        return 0;
+    for (size_t i = 0; i < len; i++) {
+        crc ^= data[i];
+        for (unsigned k = 0; k < 8; k++) {
+            crc = crc & 1 ? (crc >> 1) ^ 0xa001 : crc >> 1;
+        }
+    }
+
+    uint32_t tmp = crc;
+    crc = (crc << 8) | (tmp >> 8 & 0xff);
+    return crc;
+}
 
 void setup_uart()
 {
@@ -13,7 +31,7 @@ void setup_uart()
         switch (i)
         {
         case 0:
-            abnt_data.ds[i] = 0x14;
+            abnt_data.ds[i] = 0x00;
             break;
 
         case 1:
@@ -61,15 +79,14 @@ void set_meter_id_task()
     for(int i = 0; i < 4; i++)
     {
         METER_ID[i] = abnt_data.dr[i+1];
-    }    
-    vTaskDelete(NULL);
+    }
 }
 
-void abnt_uart_task(void *parameter)
+void abnt_uart(void *parameter)
 {
     while(true)
     {
-         uart_write_bytes(UART_NUM_2, (void *)abnt_data.ds, 66);
+        uart_write_bytes(UART_NUM_2, (void *)abnt_data.ds, 66);
         int code = uart_read_bytes(UART_NUM_2, abnt_data.dr, (UART_BUF_SIZE - 1), 100 / portTICK_PERIOD_MS);
         if(code > -1)
         {
@@ -87,10 +104,32 @@ void abnt_uart_task(void *parameter)
         }
         if(abnt_data.dr[0] != 0)
         {
-            vTaskDelete(NULL);
+            break;
         }
         vTaskDelay(550);
     }
+}
+
+void setup_abnt_command(uint8_t command, uint8_t *data)
+{
+    abnt_data.ds[0] = command;
+    if(data != NULL)
+    {
+        for(int i = 0; i < 59;i++)
+        {
+            abnt_data.ds[i + 4] = data[i];
+        }
+    }
+
+    set_crc(abnt_data.ds, 64);
+}
+
+void set_crc(uint8_t *data, size_t size)
+{
+    uint16_t a = 0;
+    a = crc16arc_bit(a, data, size);
+    data[size] = (a >> (1 * 8)) & 0xFF;
+    data[size + 1] = (a >> (0 * 8)) & 0xFF;
 }
 
 void uart_event_task()

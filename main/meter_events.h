@@ -13,7 +13,6 @@
 #define ABNT_RX (5)
 
 const static uart_port_t uart_port = UART_NUM_2;
-const char *UART_TAG = "UART";
 
 typedef enum
 {
@@ -36,6 +35,7 @@ typedef struct
     int dr_size;
 } UARTData;
 
+extern char METER_ID[4];
 extern UARTData abnt_data;
 extern CommandQueue abnt_command_queue;
 
@@ -46,8 +46,8 @@ void setup_uart();
 void uart_event_task();
 
 void set_meter_id_task();
-void check_crc();
+void check_crc(UARTData *data);
+void set_crc(uint8_t *data, size_t size);
 void setup_abnt_command(uint8_t command, uint8_t *data);
 void abnt_verify_data_received(const uint8_t *data, size_t len);
 void abnt_uart_task(void *parameter);
-

@@ -35,7 +35,7 @@ CommandQueue *create_command_queue(size_t size);
 CommandQueue *resize_command_queue(CommandQueue cq, size_t size);
 bool is_command_queue_empty(CommandQueue *cq);
 bool is_command_queue_full(CommandQueue *cq);
-void register_func_to_command_queue(CommandQueue *cq, void (*func)(void *parameters), void *func_args, int command);
+void register_func_to_command_queue(CommandQueue *cq, void (*func)(void *parameters), void *func_args, size_t args_size,int command);
 bool dequeue_command_buffer(CommandQueue *cq);
 bool enqueue_command_buffer(CommandQueue *cq, int command);
 void process_command_queue(CommandQueue *cq);

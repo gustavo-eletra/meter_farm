@@ -98,10 +98,7 @@ bool dequeue_command_buffer(CommandQueue *cq)
 
 void process_command_queue(CommandQueue *cq)
 {
-    while(dequeue_command_buffer(cq) == true)
-    {
-        printf("Processing commands\n");
-    }
+    while(dequeue_command_buffer(cq) == true){}
 }
 
 bool reset_command_queue(CommandQueue *cq)
@@ -132,7 +129,7 @@ void clear_command_queue(CommandQueue *cq)
     cq->processed = false;
 }
 
-void register_func_to_command_queue(CommandQueue *cq, void (*func)(void *parameters), void *func_args, int command)
+void register_func_to_command_queue(CommandQueue *cq, void (*func)(void *parameters), void *func_args, size_t args_size,int command)
 {
 
     if(cq->counter >= cq->total_size)
@@ -144,10 +141,8 @@ void register_func_to_command_queue(CommandQueue *cq, void (*func)(void *paramet
     cq->func_arr[cq->counter] = *(*func);
     if(func_args != NULL)
     {
-        printf("ptr : %i\n", *(int *)func_args);
-        cq->data_arr[cq->counter].data = malloc(sizeof(*func_args));
-        memcpy(cq->data_arr[cq->counter].data, func_args, sizeof(*func_args));
-        printf("ptr : %i\n", *(int *)cq->data_arr[cq->counter].data);
+        cq->data_arr[cq->counter].data = malloc(args_size);
+        memcpy(cq->data_arr[cq->counter].data, func_args, args_size);
     }
     else
     {
@@ -163,4 +158,19 @@ void cq_state(CommandQueue *cq)
     printf("ComandQueue counter: %i\n", cq->counter);
     printf("ComandQueue current size: %i\n", cq->current_size);
     printf("ComandQueue is processed: %i\n", cq->processed);
+}
+
+void cq_fsm(CommandQueue *cq, int command, void *data)
+{
+    int a = 0;
+
+    for(int i = 0; i < cq->current_size; i++)
+    {
+        if(command == cq->command_arr[i])
+        {
+            break;
+        }
+        a++;
+    }
+    cq->func_arr[a](data);
 }
