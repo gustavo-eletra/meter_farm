@@ -5,6 +5,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include "meter_events.h"
+#include "mqtt.h"
 
 typedef enum
 {
@@ -50,21 +51,25 @@ void app_main(void)
 
     //vTaskSuspend(b);
 
-    int x = 50;
-    CommandQueue *queue = create_command_queue(10);
-    register_func_to_command_queue(queue, &a, NULL, 0, A);
-    register_func_to_command_queue(queue, &b, &x, 4, B);
-    register_func_to_command_queue(queue, &c, NULL, 0, C);
-    enqueue_command_buffer(queue, A);
-    enqueue_command_buffer(queue, C);
-    enqueue_command_buffer(queue, B);
-    enqueue_command_buffer(queue, B);
-    enqueue_command_buffer(queue, C);
-    enqueue_command_buffer(queue, B);
-    enqueue_command_buffer(queue, A);
+    // int x = 50;
+    // CommandQueue *queue = create_command_queue(10);
+    // register_func_to_command_queue(queue, &a, NULL, 0, A);
+    // register_func_to_command_queue(queue, &b, &x, 4, B);
+    // register_func_to_command_queue(queue, &c, NULL, 0, C);
+    // enqueue_command_buffer(queue, A);
+    // enqueue_command_buffer(queue, C);
+    // enqueue_command_buffer(queue, B);
+    // enqueue_command_buffer(queue, B);
+    // enqueue_command_buffer(queue, C);
+    // enqueue_command_buffer(queue, B);
+    // enqueue_command_buffer(queue, A);
 
-    process_command_queue(queue);
+    // process_command_queue(queue);
 
-     int y = 10;
-    cq_fsm(queue, B, &y);
+    // int y = 10;
+    // cq_fsm(queue, B, &y);
+
+    esp_log_level_set("*", ESP_LOG_NONE);
+
+    ESP_ERROR_CHECK(wifi_app_start());
 }
