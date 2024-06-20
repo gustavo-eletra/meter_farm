@@ -9,7 +9,8 @@
 #include <stdbool.h>
 
 typedef void (*command_func[256])(void *data);
-//QueueHandle_t abnt_data_queue;
+
+//TODO:make function to change the data of the command
 
 typedef struct
 {
