@@ -86,6 +86,7 @@ void set_meter_id_task()
 
 void abnt_uart(void *parameter)
 {
+    uint8_t retries = 0;
     while(true)
     {
         uart_write_bytes(UART_NUM_2, (void *)abnt_data.ds, 66);
@@ -104,10 +105,11 @@ void abnt_uart(void *parameter)
                 }
             }
         }
-        if(abnt_data.dr[0] != 0)
+        if(abnt_data.dr[4] != 0 || retries > 10)
         {
             break;
         }
+        retries++;
         vTaskDelay(550);
     }
 }

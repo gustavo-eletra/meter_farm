@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -22,6 +20,9 @@
 #include "esp_log.h"
 #include "mqtt_client.h"
 
+#include "common.h"
+#include "meter_events.h"
+
 static const char *TAG = "MQTT_EXAMPLE";
 const char *ssid = "AndroidAP2CC1";
 const char *passwd = "rzue0381";
@@ -35,11 +36,13 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
     case MQTT_EVENT_CONNECTED:
         ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
 
-        char *topico = "testtopic/238191212838";
+        char *topico_sub = "eletra/meter-farm/238191212838";
+        char *topico_pub = "eletra/meter-farm/238191212838/log";
+        char *topico_alive = "eletra/meter-farm/238191212838/alive";
         char *mensagem = "Olá mundo";
 
-        esp_mqtt_client_publish(handler_args, topico, mensagem, 0, 0 ,0 );
-        esp_mqtt_client_subscribe_single(handler_args, topico, 0);
+        esp_mqtt_client_publish(handler_args, topico_alive, mensagem, 0, 0 ,0 );
+        esp_mqtt_client_subscribe_single(handler_args, topico_sub, 0);
 
         break;
     case MQTT_EVENT_DISCONNECTED:
@@ -209,5 +212,7 @@ void app_main(void)
 
     //esp_log_level_set("*", ESP_LOG_NONE);
 
+    setup_uart();
     ESP_ERROR_CHECK(wifi_app_start());
+    //xTaskCreatePinnedToCore(wifi_app_start, "mqtt", 5000, NULL, 1, NULL, 0);
 }

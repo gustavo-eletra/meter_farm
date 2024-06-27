@@ -39,6 +39,7 @@ typedef struct
 extern char METER_ID[4];
 extern UARTData abnt_data;
 extern CommandQueue abnt_command_queue;
+extern SemaphoreHandle_t uart_mutex;
 
 //Helper functions
 uint16_t crc16arc_bit(uint16_t crc, void const *mem, size_t len);
