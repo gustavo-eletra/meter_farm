@@ -9,8 +9,8 @@
 #include "stdarg.h"
 
 #define UART_BUF_SIZE (1024)
-#define ABNT_TX (18)
-#define ABNT_RX (5)
+#define UART_TX 18
+#define UART_RX 5
 
 const static uart_port_t uart_port = UART_NUM_2;
 
@@ -53,3 +53,6 @@ void set_crc(uint8_t *data, size_t size);
 void setup_abnt_command(uint8_t command, uint8_t *data);
 void abnt_verify_data_received(const uint8_t *data, size_t len);
 void abnt_uart_task(void *parameter);
+
+void abnt_open_session();
+void abnt_close_session();

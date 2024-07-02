@@ -22,6 +22,7 @@
 
 #include "common.h"
 #include "meter_events.h"
+#include "mbedtls/md.h"
 
 char *mensagem = "iniciando mqtt";
 
@@ -367,10 +368,12 @@ void app_main(void)
     // cq_fsm(queue, B, &y);
 
     //esp_log_level_set("*", ESP_LOG_NONE);
-    dt = (uint8_t *)calloc(BUF_SIZE, sizeof(uint8_t));
+    mbedtls_md_context_t ctx;
+    mbedtls_md_init(&ctx);
+    mbedtls_md_free(&ctx);
     uart_msg = (char *)calloc(BUF_SIZE, sizeof(char));
     setup();
+    //setup_uart();
     ESP_ERROR_CHECK(wifi_app_start());
-    //uart_test();
     //xTaskCreatePinnedToCore(wifi_app_start, "mqtt", 5000, NULL, 1, NULL, 0);
 }

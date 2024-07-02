@@ -67,7 +67,7 @@ void setup_uart()
     ESP_ERROR_CHECK(uart_driver_install(UART_NUM_2, UART_BUF_SIZE * 2, UART_BUF_SIZE * 2, 0, NULL, intr_alloc_flags));
     ESP_ERROR_CHECK(uart_param_config(UART_NUM_2, &uart_config));
     uart_set_line_inverse(UART_NUM_2, UART_SIGNAL_TXD_INV | UART_SIGNAL_RXD_INV);
-    ESP_ERROR_CHECK(uart_set_pin(UART_NUM_2, ABNT_TX, ABNT_TX, 4, 2));
+    ESP_ERROR_CHECK(uart_set_pin(UART_NUM_2, UART_TX, UART_TX, 4, 2));
 }
 
 void set_meter_id_task()
@@ -110,7 +110,7 @@ void abnt_uart(void *parameter)
             break;
         }
         retries++;
-        vTaskDelay(550);
+        vTaskDelay(250);
     }
 }
 

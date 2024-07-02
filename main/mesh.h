@@ -17,7 +17,7 @@
 #include "lwip/sys.h"
 
 #define RX_WIFI_SIZE 526
-#define TX_@IFI_SIZE 526
+#define TX_WIFI_SIZE 526
 
 static const char *MESH_TAG = "MESH";
 static const char *WIFI_TAG = "WIFI";
